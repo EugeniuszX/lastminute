@@ -1,16 +1,13 @@
 {
   "extends": "@react-native/typescript-config/tsconfig.json",
   "compilerOptions": {
-	"jsx": "react",
-	"strict": true,
-	"noUncheckedIndexedAccess": true,
-	"paths": {
-		"@/*": ["./*"]
-	}
+    "jsx": "react",
+    "strict": true,
+    "baseUrl": ".",
+    "noUncheckedIndexedAccess": true,
+    "paths": {
+      "@/*": ["./*"]
+    }
   },
-  "include": [
-	"**/*.ts",
-	"**/*.tsx",
-	"declarations.d.ts"
-  ]
+  "include": ["**/*.ts", "**/*.tsx", "declarations.d.ts"]
 }

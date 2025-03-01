@@ -36,6 +36,7 @@ module.exports = {
       },
       rules: {
         ...shared,
+        "@typescript-eslint/func-call-spacing": "off",
         "jsx-expressions/strict-logical-expressions": "error",
         "eslint-comments/no-unused-disable": "error",
         "@typescript-eslint/consistent-type-imports": "error",
