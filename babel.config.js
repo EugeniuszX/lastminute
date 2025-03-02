@@ -15,5 +15,6 @@ module.exports = {
       },
     ],
     "react-native-boost/plugin",
+    "react-native-reanimated/plugin",
   ],
 }
