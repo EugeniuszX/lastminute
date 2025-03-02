@@ -1,19 +1,17 @@
 import React from "react"
-import { Text, View } from "react-native"
 
 import { useHotels } from "../../entities/hotel"
-import { WithSafeArea } from "../../shared/ui/WithSafeArea/ui"
+import { WithSafeArea } from "../../shared/ui"
+import { HotelsList } from "../../widgets/hotels-list"
 
 export const HomeScreen: React.FC = () => {
-  const { data } = useHotels()
+  const { data, isLoading } = useHotels()
 
   console.log("data", data)
 
   return (
     <WithSafeArea>
-      <View>
-        <Text>Home</Text>
-      </View>
+      <HotelsList data={data} isLoading={isLoading} />
     </WithSafeArea>
   )
 }

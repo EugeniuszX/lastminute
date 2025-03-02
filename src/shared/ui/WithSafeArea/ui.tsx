@@ -46,10 +46,12 @@ const SafeAreaAndroid = styled.SafeAreaView`
 
 const SafeAreaIOS = styled.View<{ backgroundColor?: string }>`
   flex: 1;
-  background-color: ${(props) => props.backgroundColor ?? props.theme.primary};
+  background-color: ${(props) =>
+    props.backgroundColor ?? props.theme.background};
 `
 
 const SafeAreaBlock = styled.View<{ backgroundColor?: string; inset: number }>`
   height: ${({ inset }) => inset}px;
-  background-color: ${(props) => props.backgroundColor ?? props.theme.primary};
+  background-color: ${(props) =>
+    props.backgroundColor ?? props.theme.background};
 `

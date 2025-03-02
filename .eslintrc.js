@@ -18,13 +18,6 @@ module.exports = {
   ignorePatterns: ["expo-env.d.ts"],
   rules: {
     ...shared,
-    "unicorn/filename-case": [
-      "error",
-      {
-        case: "kebabCase",
-        ignore: ["/android", "/ios"],
-      },
-    ],
     "styled-components-a11y/no-autofocus": "off",
   },
   overrides: [
