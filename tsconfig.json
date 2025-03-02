@@ -3,8 +3,11 @@
   "compilerOptions": {
     "jsx": "react",
     "strict": true,
-    "baseUrl": "./",
-    "noUncheckedIndexedAccess": true
+    "noUncheckedIndexedAccess": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "types": ["@types/styled-components-react-native"]
   },
+  "typeRoots": ["node_modules/@types"],
   "include": ["**/*.ts", "**/*.tsx", "declarations.d.ts"]
 }

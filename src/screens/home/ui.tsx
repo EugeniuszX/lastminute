@@ -1,12 +1,19 @@
 import React from "react"
-import { SafeAreaView, Text, View } from "react-native"
+import { Text, View } from "react-native"
+
+import { useHotels } from "../../entities/hotel"
+import { WithSafeArea } from "../../shared/ui/WithSafeArea/ui"
 
 export const HomeScreen: React.FC = () => {
+  const { data } = useHotels()
+
+  console.log("data", data)
+
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <WithSafeArea>
       <View>
         <Text>Home</Text>
       </View>
-    </SafeAreaView>
+    </WithSafeArea>
   )
 }

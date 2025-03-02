@@ -9,7 +9,11 @@ const shared = {
 module.exports = {
   // Configuration for JavaScript files
   root: true,
-  extends: ["@react-native", "plugin:prettier/recommended"],
+  extends: [
+    "@react-native",
+    "plugin:prettier/recommended",
+    "plugin:styled-components-a11y/recommended",
+  ],
   plugins: ["unicorn"],
   ignorePatterns: ["expo-env.d.ts"],
   rules: {
@@ -21,6 +25,7 @@ module.exports = {
         ignore: ["/android", "/ios"],
       },
     ],
+    "styled-components-a11y/no-autofocus": "off",
   },
   overrides: [
     // Configuration for TypeScript files
