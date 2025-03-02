@@ -11,7 +11,6 @@ interface IProps {
 export const WithSafeArea: React.FC<IProps> = ({ children, color }) => {
   const theme = useColorScheme()
   const currentBarStyle = theme === "dark" ? "light-content" : "dark-content"
-  const backgroundColor = color ? color : "white"
 
   const { top } = useSafeAreaInsets()
 
@@ -26,10 +25,10 @@ export const WithSafeArea: React.FC<IProps> = ({ children, color }) => {
     }
 
     return (
-      <SafeAreaIOS backgroundColor={backgroundColor}>
-        <SafeAreaBlock inset={top} backgroundColor={backgroundColor} />
+      <SafeAreaIOS backgroundColor={color}>
+        <SafeAreaBlock inset={top} backgroundColor={color} />
         <StatusBar
-          backgroundColor={backgroundColor}
+          backgroundColor={color}
           translucent
           barStyle={currentBarStyle}
         />
@@ -41,14 +40,16 @@ export const WithSafeArea: React.FC<IProps> = ({ children, color }) => {
   return <>{handleRenderSafeArea()}</>
 }
 
-const SafeAreaAndroid = styled.SafeAreaView``
-
-const SafeAreaIOS = styled.View<{ backgroundColor: string }>`
+const SafeAreaAndroid = styled.SafeAreaView`
   flex: 1;
-  background-color: ${({ backgroundColor }) => backgroundColor};
+`
+
+const SafeAreaIOS = styled.View<{ backgroundColor?: string }>`
+  flex: 1;
+  background-color: ${(props) => props.backgroundColor ?? props.theme.primary};
 `
 
 const SafeAreaBlock = styled.View<{ backgroundColor?: string; inset: number }>`
   height: ${({ inset }) => inset}px;
-  background-color: ${({ backgroundColor }) => backgroundColor ?? "white"};
+  background-color: ${(props) => props.backgroundColor ?? props.theme.primary};
 `

@@ -1,12 +1,18 @@
 import { NavigationContainer } from "@react-navigation/native"
 import React, { useEffect } from "react"
+import { useColorScheme } from "react-native"
 import BootSplash from "react-native-bootsplash"
 import { SafeAreaProvider } from "react-native-safe-area-context"
+import { ThemeProvider } from "styled-components/native"
 
 import { Routing } from "../screens"
+import { darkTheme, lightTheme } from "../shared/config"
 import { QueryProvider } from "./providers"
 
 export const App: React.FC = () => {
+  const colorScheme = useColorScheme()
+  const theme = colorScheme === "dark" ? darkTheme : lightTheme
+
   useEffect(() => {
     void BootSplash.hide({ fade: true })
   }, [])
@@ -15,7 +21,9 @@ export const App: React.FC = () => {
     <SafeAreaProvider>
       <QueryProvider>
         <NavigationContainer>
-          <Routing />
+          <ThemeProvider theme={theme}>
+            <Routing />
+          </ThemeProvider>
         </NavigationContainer>
       </QueryProvider>
     </SafeAreaProvider>
