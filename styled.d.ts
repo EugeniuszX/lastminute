@@ -4,6 +4,10 @@ declare module "styled-components/native" {
   export interface DefaultTheme extends Theme {
     primary: string
     secondary: string
+    cardShadow: string
+    accent: string
+    accentLight: string
+    rating: string
     background: string
     surface: string
     textPrimary: string
