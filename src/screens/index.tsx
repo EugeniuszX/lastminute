@@ -1,24 +1,33 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import React from "react"
 
+import type { Hotel } from "../entities/hotel"
 import { HomeScreen } from "./home"
-import { HotelScreen } from "./hotel"
+import { HotelDetailsScreen } from "./hotel-details"
 
 const Stack = createNativeStackNavigator<RootStackListType>()
 
-type RootStackListType = {
+export type RootStackListType = {
   Home: undefined
-  Hotel: undefined
+  HotelDetails: { data: Hotel }
 }
 
 export const Routing: React.FC = () => {
   return (
     <Stack.Navigator
-      screenOptions={{ headerShown: false }}
+      screenOptions={{
+        headerShown: false,
+      }}
       initialRouteName="Home"
     >
       <Stack.Screen name="Home" component={HomeScreen} />
-      <Stack.Screen name="Hotel" component={HotelScreen} />
+      <Stack.Screen
+        options={{
+          headerShown: false,
+        }}
+        name="HotelDetails"
+        component={HotelDetailsScreen}
+      />
     </Stack.Navigator>
   )
 }

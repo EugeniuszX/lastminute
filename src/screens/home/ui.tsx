@@ -7,8 +7,6 @@ import { HotelsList } from "../../widgets/hotels-list"
 export const HomeScreen: React.FC = () => {
   const { data, isLoading } = useHotels()
 
-  console.log("data", data)
-
   return (
     <WithSafeArea>
       <HotelsList data={data} isLoading={isLoading} />

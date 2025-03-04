@@ -1,25 +1,60 @@
+import { useNavigation } from "@react-navigation/native"
+import type { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import React, { useState } from "react"
+import { TouchableOpacity } from "react-native"
 import FastImage from "react-native-fast-image"
+import {
+  SharedTransition,
+  SharedTransitionType,
+  withSpring,
+} from "react-native-reanimated"
 import styled from "styled-components/native"
 
 import type { Hotel } from "../../../entities/hotel"
+import type { RootStackListType } from "../../../screens"
 import { Text } from "../../../shared/ui"
 
 interface Props {
   hotel: Hotel
 }
 
+export const transition = SharedTransition.custom((values) => {
+  "worklet"
+  return {
+    height: withSpring(values.targetHeight),
+    width: withSpring(values.targetWidth),
+  }
+})
+  .progressAnimation((values, progress) => {
+    "worklet"
+    const getValue = (
+      progress: number,
+      target: number,
+      current: number,
+    ): number => {
+      return progress * (target - current) + current
+    }
+    return {
+      width: getValue(progress, values.targetWidth, values.currentWidth),
+      height: getValue(progress, values.targetHeight, values.currentHeight),
+    }
+  })
+  .defaultTransitionType(SharedTransitionType.ANIMATION)
+
 export const HotelItem: React.FC<Props> = ({ hotel }) => {
   const [imageError, setImageError] = useState(false)
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackListType, "Home">>()
+
+  const onPressHotel = () => navigation.push("HotelDetails", { data: hotel })
 
   return (
-    <Container>
+    <Container activeOpacity={0.6} onPress={onPressHotel}>
       <ImageContainer>
         {hotel.gallery.length && !imageError ? (
           <HotelImage
             source={{
               uri: hotel.gallery[0],
-              priority: FastImage.priority.normal,
             }}
             resizeMode={FastImage.resizeMode.cover}
             onError={() => setImageError(true)}
@@ -32,15 +67,13 @@ export const HotelItem: React.FC<Props> = ({ hotel }) => {
       </ImageContainer>
 
       <Content>
-        <Text variant="primary" style={{ fontSize: 18, fontWeight: "600" }}>
-          {hotel.name}
-        </Text>
+        <HotelName variant="primary">{hotel.name}</HotelName>
 
         <RatingRow>
           <RatingText>★ {hotel.stars}</RatingText>
-          <Text variant="secondary" style={{ fontWeight: "500" }}>
+          <UserRating variant="secondary">
             Rating: {hotel.userRating}/10
-          </Text>
+          </UserRating>
         </RatingRow>
 
         <Text variant="secondary">{hotel.location.address}</Text>
@@ -70,7 +103,7 @@ export const HotelItem: React.FC<Props> = ({ hotel }) => {
   )
 }
 
-const Container = styled.View`
+const Container = styled(TouchableOpacity)`
   margin: 16px;
   border-radius: 16px;
   background-color: ${({ theme }) => theme.surface};
@@ -97,6 +130,11 @@ const ImageContainer = styled.View`
   overflow: hidden;
 `
 
+const HotelName = styled(Text)`
+  font-size: 18px;
+  font-weight: 600;
+`
+
 const Price = styled(Text)`
   font-size: 20px;
   font-weight: bold;
@@ -104,7 +142,11 @@ const Price = styled(Text)`
 
 const HotelImage = styled(FastImage)`
   width: 100%;
-  height: 100%;
+  height: 220px;
+`
+
+const UserRating = styled(Text)`
+  font-weight: 500;
 `
 
 const RatingText = styled(Text)`
