@@ -5,6 +5,7 @@ import styled from "styled-components/native"
 
 import type { Hotel } from "../../../entities/hotel"
 import { HotelItem } from "./HotelItem"
+import { ListHeader } from "./ListHeader"
 
 interface HotelsListProps {
   data: Hotel[] | undefined
@@ -26,6 +27,10 @@ export const HotelsList: React.FC<HotelsListProps> = ({ data }) => {
         renderItem={renderItem}
         keyExtractor={keyExtractor}
         showsVerticalScrollIndicator={false}
+        stickyHeaderIndices={[0]}
+        ListHeaderComponent={
+          <ListHeader onPressFilter={() => {}} onPressSort={() => {}} />
+        }
         contentContainerStyle={{ paddingVertical: 8 }}
       />
     </Container>

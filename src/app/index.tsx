@@ -2,6 +2,7 @@ import { NavigationContainer } from "@react-navigation/native"
 import React, { useEffect } from "react"
 import { useColorScheme } from "react-native"
 import BootSplash from "react-native-bootsplash"
+import { GestureHandlerRootView } from "react-native-gesture-handler"
 import { SafeAreaProvider } from "react-native-safe-area-context"
 import { ThemeProvider } from "styled-components/native"
 
@@ -19,13 +20,15 @@ export const App: React.FC = () => {
 
   return (
     <SafeAreaProvider>
-      <QueryProvider>
-        <NavigationContainer>
-          <ThemeProvider theme={theme}>
-            <Routing />
-          </ThemeProvider>
-        </NavigationContainer>
-      </QueryProvider>
+      <GestureHandlerRootView>
+        <QueryProvider>
+          <NavigationContainer>
+            <ThemeProvider theme={theme}>
+              <Routing />
+            </ThemeProvider>
+          </NavigationContainer>
+        </QueryProvider>
+      </GestureHandlerRootView>
     </SafeAreaProvider>
   )
 }
