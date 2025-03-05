@@ -1,52 +1,79 @@
-import React from "react"
+import React, { useState } from "react"
 import { TouchableOpacity } from "react-native"
 import styled from "styled-components/native"
 
 import { Text } from "../../shared/ui"
 
-export type SortOption = "price" | "rating"
-export type SortOrder = "asc" | "desc"
-
-interface Props {
-  selectedOption?: SortOption
-  selectedOrder?: SortOrder
-  onSelect: (option: SortOption, order: SortOrder) => void
+export interface FilterOptions {
+  minPrice?: number
+  maxPrice?: number
+  minRating?: number
 }
 
-export const SortSheet: React.FC<Props> = ({
-  selectedOption,
-  selectedOrder,
-  onSelect,
+interface FilterSheetProps {
+  options: FilterOptions
+  onApply: (options: FilterOptions) => void
+}
+
+export const FilterSheet: React.FC<FilterSheetProps> = ({
+  options,
+  onApply,
 }) => {
+  const [localOptions, setLocalOptions] = useState(options)
+
   return (
     <Container>
-      <Title variant="primary">Sort by</Title>
-      <OptionGroup>
-        <Option
-          active={selectedOption === "price" && selectedOrder === "asc"}
-          onPress={() => onSelect("price", "asc")}
-        >
-          <Text variant="primary">Price: Low to High</Text>
-        </Option>
-        <Option
-          active={selectedOption === "price" && selectedOrder === "desc"}
-          onPress={() => onSelect("price", "desc")}
-        >
-          <Text variant="primary">Price: High to Low</Text>
-        </Option>
-        <Option
-          active={selectedOption === "rating" && selectedOrder === "desc"}
-          onPress={() => onSelect("rating", "desc")}
-        >
-          <Text variant="primary">Rating: High to Low</Text>
-        </Option>
-        <Option
-          active={selectedOption === "rating" && selectedOrder === "asc"}
-          onPress={() => onSelect("rating", "asc")}
-        >
-          <Text variant="primary">Rating: Low to High</Text>
-        </Option>
-      </OptionGroup>
+      <Title variant="primary">Filter</Title>
+      <FilterGroup>
+        <FilterSection>
+          <Text variant="secondary">Price Range</Text>
+          <RangeInputs>
+            <Input
+              placeholder="Min"
+              value={localOptions.minPrice?.toString()}
+              onChangeText={(value) =>
+                setLocalOptions((prev) => ({
+                  ...prev,
+                  minPrice: Number(value) || undefined,
+                }))
+              }
+              keyboardType="numeric"
+            />
+            <Input
+              placeholder="Max"
+              value={localOptions.maxPrice?.toString()}
+              onChangeText={(value) =>
+                setLocalOptions((prev) => ({
+                  ...prev,
+                  maxPrice: Number(value) || undefined,
+                }))
+              }
+              keyboardType="numeric"
+            />
+          </RangeInputs>
+        </FilterSection>
+
+        <FilterSection>
+          <Text variant="secondary">Minimum Rating</Text>
+          <Input
+            placeholder="Min Rating (0-10)"
+            value={localOptions.minRating?.toString()}
+            onChangeText={(value) =>
+              setLocalOptions((prev) => ({
+                ...prev,
+                minRating: Number(value) || undefined,
+              }))
+            }
+            keyboardType="numeric"
+          />
+        </FilterSection>
+
+        <ApplyButton onPress={() => onApply(localOptions)}>
+          <Text variant="primary" style={{ color: "white" }}>
+            Apply Filters
+          </Text>
+        </ApplyButton>
+      </FilterGroup>
     </Container>
   )
 }
@@ -61,15 +88,31 @@ const Title = styled(Text)`
   font-weight: 600;
 `
 
-const OptionGroup = styled.View`
+const FilterGroup = styled.View`
+  gap: 20px;
+`
+
+const FilterSection = styled.View`
+  gap: 8px;
+`
+
+const RangeInputs = styled.View`
+  flex-direction: row;
   gap: 12px;
 `
 
-const Option = styled(TouchableOpacity)<{ active?: boolean }>`
+const Input = styled.TextInput`
+  flex: 1;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid ${({ theme }) => theme.border};
+  background-color: ${({ theme }) => theme.surface};
+  color: ${({ theme }) => theme.primary};
+`
+
+const ApplyButton = styled(TouchableOpacity)`
+  background-color: ${({ theme }) => theme.primary};
   padding: 16px;
   border-radius: 12px;
-  background-color: ${({ theme, active }) =>
-    active ? theme.primary + "20" : theme.surface};
-  border: 1px solid
-    ${({ theme, active }) => (active ? theme.primary : theme.border)};
+  align-items: center;
 `
