@@ -42,6 +42,7 @@ module.exports = {
         "react/no-unstable-nested-components": "off",
         "simple-import-sort/imports": "error",
         "simple-import-sort/exports": "error",
+        "react-native/no-inline-styles": "off",
       },
     },
     {

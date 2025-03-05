@@ -20,7 +20,7 @@ export const App: React.FC = () => {
 
   return (
     <SafeAreaProvider>
-      <GestureHandlerRootView>
+      <GestureHandlerRootView style={{ flex: 1 }}>
         <QueryProvider>
           <NavigationContainer>
             <ThemeProvider theme={theme}>

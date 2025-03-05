@@ -1,8 +1,9 @@
-import React, { useState } from "react"
+import type BottomSheet from "@gorhom/bottom-sheet"
+import React, { useMemo, useRef, useState } from "react"
 import { TouchableOpacity } from "react-native"
 import styled from "styled-components/native"
 
-import { Text } from "../../shared/ui"
+import { Text, WithBottomSheet } from "../../shared/ui"
 
 export interface FilterOptions {
   minPrice?: number
@@ -13,68 +14,80 @@ export interface FilterOptions {
 interface FilterSheetProps {
   options: FilterOptions
   onApply: (options: FilterOptions) => void
+  onClose: () => void
 }
 
 export const FilterSheet: React.FC<FilterSheetProps> = ({
   options,
   onApply,
+  onClose,
 }) => {
+  const bottomSheetRef = useRef<BottomSheet>(null)
+
   const [localOptions, setLocalOptions] = useState(options)
 
+  const snapPoints = useMemo(() => ["25%"], [])
+
   return (
-    <Container>
-      <Title variant="primary">Filter</Title>
-      <FilterGroup>
-        <FilterSection>
-          <Text variant="secondary">Price Range</Text>
-          <RangeInputs>
+    <WithBottomSheet
+      bottomSheetRef={bottomSheetRef}
+      handleCloseSheet={onClose}
+      snapPoints={snapPoints}
+    >
+      <Container>
+        <Title variant="primary">Filter</Title>
+        <FilterGroup>
+          <FilterSection>
+            <Text variant="secondary">Price Range</Text>
+            <RangeInputs>
+              <Input
+                placeholder="Min"
+                value={localOptions.minPrice?.toString()}
+                onChangeText={(value) =>
+                  setLocalOptions((prev) => ({
+                    ...prev,
+                    minPrice: Number(value) || undefined,
+                  }))
+                }
+                keyboardType="numeric"
+              />
+              <Input
+                placeholder="Max"
+                value={localOptions.maxPrice?.toString()}
+                onChangeText={(value) =>
+                  setLocalOptions((prev) => ({
+                    ...prev,
+                    maxPrice: Number(value) || undefined,
+                  }))
+                }
+                keyboardType="numeric"
+              />
+            </RangeInputs>
+          </FilterSection>
+
+          <FilterSection>
+            <Text variant="secondary">Minimum Rating</Text>
             <Input
-              placeholder="Min"
-              value={localOptions.minPrice?.toString()}
+              placeholder="Min Rating (0-10)"
+              value={localOptions.minRating?.toString()}
               onChangeText={(value) =>
                 setLocalOptions((prev) => ({
                   ...prev,
-                  minPrice: Number(value) || undefined,
+                  minRating: Number(value) || undefined,
                 }))
               }
               keyboardType="numeric"
             />
-            <Input
-              placeholder="Max"
-              value={localOptions.maxPrice?.toString()}
-              onChangeText={(value) =>
-                setLocalOptions((prev) => ({
-                  ...prev,
-                  maxPrice: Number(value) || undefined,
-                }))
-              }
-              keyboardType="numeric"
-            />
-          </RangeInputs>
-        </FilterSection>
+          </FilterSection>
 
-        <FilterSection>
-          <Text variant="secondary">Minimum Rating</Text>
-          <Input
-            placeholder="Min Rating (0-10)"
-            value={localOptions.minRating?.toString()}
-            onChangeText={(value) =>
-              setLocalOptions((prev) => ({
-                ...prev,
-                minRating: Number(value) || undefined,
-              }))
-            }
-            keyboardType="numeric"
-          />
-        </FilterSection>
-
-        <ApplyButton onPress={() => onApply(localOptions)}>
-          <Text variant="primary" style={{ color: "white" }}>
-            Apply Filters
-          </Text>
-        </ApplyButton>
-      </FilterGroup>
-    </Container>
+          <ApplyButton onPress={() => onApply(localOptions)}>
+            <Text variant="primary" style={{ color: "white" }}>
+              Apply Filters
+            </Text>
+          </ApplyButton>
+        </FilterGroup>
+      </Container>
+    </WithBottomSheet>
   )
 }
 

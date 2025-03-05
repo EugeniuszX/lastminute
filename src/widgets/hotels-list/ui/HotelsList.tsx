@@ -1,18 +1,19 @@
 import React, { useCallback } from "react"
-import type { ListRenderItem } from "react-native"
-import { FlatList } from "react-native"
+import { FlatList, type ListRenderItem } from "react-native"
 import styled from "styled-components/native"
 
 import type { Hotel } from "../../../entities/hotel"
 import { HotelItem } from "./HotelItem"
-import { ListHeader } from "./ListHeader"
 
 interface HotelsListProps {
   data: Hotel[] | undefined
-  isLoading: boolean
+  headerComponent: React.ReactElement
 }
 
-export const HotelsList: React.FC<HotelsListProps> = ({ data }) => {
+export const HotelsList: React.FC<HotelsListProps> = ({
+  data,
+  headerComponent,
+}) => {
   const renderItem: ListRenderItem<Hotel> = useCallback(
     ({ item }) => <HotelItem hotel={item} />,
     [],
@@ -28,9 +29,7 @@ export const HotelsList: React.FC<HotelsListProps> = ({ data }) => {
         keyExtractor={keyExtractor}
         showsVerticalScrollIndicator={false}
         stickyHeaderIndices={[0]}
-        ListHeaderComponent={
-          <ListHeader onPressFilter={() => {}} onPressSort={() => {}} />
-        }
+        ListHeaderComponent={headerComponent}
         contentContainerStyle={{ paddingVertical: 8 }}
       />
     </Container>
