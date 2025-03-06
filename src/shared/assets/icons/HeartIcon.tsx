@@ -36,7 +36,7 @@ export const HeartIcon: React.FC<HeartIconProps> = (props) => {
     const stroke = interpolateColor(
       isFavorite.value,
       [0, 1],
-      ["#E2E0E0", theme.primary],
+      [theme.border, theme.primary],
       "RGB",
     )
 

@@ -5,7 +5,7 @@ import { createSelectors, storage } from "../../../shared/lib"
 import type { Hotel } from "../../hotel"
 
 interface AuthState {
-  favorites: Hotel[] | null
+  favorites: Hotel[] | undefined
   setFavorites: (hotels: Hotel) => void
   isFavorite: (id: number) => boolean
 }
@@ -14,7 +14,7 @@ export const useUserStore = createSelectors(
   create<AuthState>()(
     persist(
       (set, get) => ({
-        favorites: null,
+        favorites: undefined,
         setFavorites: (hotel) => {
           const favorites = get().favorites
           if (favorites) {
@@ -22,7 +22,7 @@ export const useUserStore = createSelectors(
             if (index === -1) {
               set({ favorites: [...favorites, hotel] })
             } else {
-              const result = favorites.slice(index, 1)
+              const result = favorites.filter((item) => item.id !== hotel.id)
               set({ favorites: result })
             }
           } else {

@@ -3,8 +3,11 @@ import type { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import React from "react"
 import { ScrollView, TouchableOpacity } from "react-native"
 import FastImage from "react-native-fast-image"
+import { useSharedValue } from "react-native-reanimated"
 import styled from "styled-components/native"
 
+import { useUserStore } from "../../entities/user"
+import { HeartIcon } from "../../shared/assets/icons/HeartIcon"
 import { Text, WithSafeArea } from "../../shared/ui"
 import type { RootStackListType } from "../index"
 
@@ -15,6 +18,11 @@ interface Props {
 
 export const HotelDetailsScreen: React.FC<Props> = ({ navigation, route }) => {
   const { data } = route.params
+  const { isFavorite, setFavorites } = useUserStore()
+  const isFavoriteShared = useSharedValue(isFavorite(data.id) ? 1 : 0)
+
+  const toggleIsFavorite = () => setFavorites(data)
+
   return (
     <WithSafeArea>
       <Container>
@@ -27,6 +35,12 @@ export const HotelDetailsScreen: React.FC<Props> = ({ navigation, route }) => {
 
           <ImageContainer>
             <HotelImage source={{ uri: data.gallery[0] }} />
+            <FavoriteButton>
+              <HeartIcon
+                isFavorite={isFavoriteShared}
+                callback={toggleIsFavorite}
+              />
+            </FavoriteButton>
           </ImageContainer>
 
           <HeaderContent>
@@ -88,6 +102,13 @@ export const HotelDetailsScreen: React.FC<Props> = ({ navigation, route }) => {
 const Container = styled(ScrollView)`
   flex: 1;
   background-color: ${({ theme }) => theme.background};
+`
+
+const FavoriteButton = styled(TouchableOpacity)`
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 1;
 `
 
 const Header = styled.View`

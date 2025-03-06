@@ -1,9 +1,13 @@
+import { useNavigation } from "@react-navigation/native"
+import type { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import React from "react"
 import { TouchableOpacity } from "react-native"
 import styled from "styled-components/native"
 
+import type { RootStackListType } from "../../../screens"
 import { FilterIcon } from "../../../shared/assets/icons/Filter"
 import { SortIcon } from "../../../shared/assets/icons/Sort"
+import { StaticHeart } from "../../../shared/assets/icons/StaticHeart"
 
 interface ListHeaderProps {
   onPressSort: () => void
@@ -14,8 +18,16 @@ export const ListHeader: React.FC<ListHeaderProps> = ({
   onPressSort,
   onPressFilter,
 }) => {
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackListType, "Home">>()
+
+  const onPressFavorites = () => navigation.navigate("Favorites")
+
   return (
     <Container>
+      <ActionButton onPress={onPressFavorites}>
+        <StaticHeart />
+      </ActionButton>
       <Row>
         <ActionButton onPress={onPressSort}>
           <SortIcon />
@@ -35,7 +47,7 @@ const Row = styled.View`
 
 const Container = styled.View`
   flex-direction: row;
-  justify-content: flex-end;
+  justify-content: space-between;
   padding: 16px;
   background-color: ${({ theme }) => theme.surface};
 `

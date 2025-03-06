@@ -1,6 +1,6 @@
 import { useNavigation } from "@react-navigation/native"
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack"
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { TouchableOpacity } from "react-native"
 import FastImage from "react-native-fast-image"
 import { useSharedValue } from "react-native-reanimated"
@@ -19,15 +19,17 @@ interface Props {
 export const HotelItem: React.FC<Props> = ({ hotel }) => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackListType, "Home">>()
-  const { isFavorite, setFavorites } = useUserStore()
   const [imageError, setImageError] = useState(false)
+  const { isFavorite, favorites, setFavorites } = useUserStore()
   const isFavoriteShared = useSharedValue(isFavorite(hotel.id) ? 1 : 0)
 
   const onPressHotel = () => navigation.push("HotelDetails", { data: hotel })
 
-  const toggleIsFavorite = () => {
-    setFavorites(hotel)
-  }
+  const toggleIsFavorite = () => setFavorites(hotel)
+
+  useEffect(() => {
+    isFavoriteShared.value = isFavorite(hotel.id) ? 1 : 0
+  }, [favorites, hotel.id, isFavorite, isFavoriteShared])
 
   return (
     <Container activeOpacity={0.6} onPress={onPressHotel}>

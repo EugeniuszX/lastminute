@@ -1,23 +1,20 @@
 import React, { useCallback } from "react"
-import { ActivityIndicator, FlatList, type ListRenderItem } from "react-native"
+import { FlatList, type ListRenderItem } from "react-native"
 import styled from "styled-components/native"
 
 import type { Hotel } from "../../../entities/hotel"
-import { Text } from "../../../shared/ui"
 import { HotelItem } from "./HotelItem"
 
 interface HotelsListProps {
   data: Hotel[] | undefined
-  isPending: boolean
-  isError: boolean
   headerComponent?: React.ReactElement
+  emptyComponent?: React.ReactElement
 }
 
 export const HotelsList: React.FC<HotelsListProps> = ({
   data,
-  isPending,
-  isError,
   headerComponent,
+  emptyComponent,
 }) => {
   const renderItem: ListRenderItem<Hotel> = useCallback(
     ({ item }) => <HotelItem hotel={item} />,
@@ -34,15 +31,7 @@ export const HotelsList: React.FC<HotelsListProps> = ({
         keyExtractor={keyExtractor}
         showsVerticalScrollIndicator={false}
         stickyHeaderIndices={[0]}
-        ListEmptyComponent={
-          isError ? (
-            <Text>Error</Text>
-          ) : isPending ? (
-            <ActivityIndicator />
-          ) : (
-            <Text>Empty</Text>
-          )
-        }
+        ListEmptyComponent={emptyComponent}
         ListHeaderComponent={headerComponent}
         contentContainerStyle={{ paddingBottom: 8 }}
       />
