@@ -24,7 +24,6 @@ export const FilterHotels: React.FC<FilterSheetProps> = ({
   onClose,
 }) => {
   const bottomSheetRef = useRef<BottomSheet>(null)
-
   const [localOptions, setLocalOptions] = useState(options)
 
   const snapPoints = useMemo(() => ["40%"], [])
@@ -78,7 +77,6 @@ export const FilterHotels: React.FC<FilterSheetProps> = ({
             </RangeInputs>
           </FilterSection>
         </FilterGroup>
-
         <ApplyButton onPress={() => onApply(localOptions)}>
           <Text variant="primary" style={{ color: "white", fontSize: 16 }}>
             Show Results

@@ -79,10 +79,6 @@ export const HotelDetailsScreen: React.FC<Props> = ({ navigation, route }) => {
               <Text variant="primary">{data.contact.phoneNumber}</Text>
             </ContactBlock>
           </Section>
-
-          <BookingButton>
-            <BookingText variant="primary">Book Now</BookingText>
-          </BookingButton>
         </Content>
       </Container>
     </WithSafeArea>
@@ -210,18 +206,4 @@ const PriceText = styled(Text)`
   font-size: 24px;
   font-weight: bold;
   color: ${({ theme }) => theme.primary};
-`
-
-const BookingButton = styled(TouchableOpacity)`
-  background-color: ${({ theme }) => theme.primary};
-  padding: 16px;
-  border-radius: 12px;
-  align-items: center;
-  margin-top: 8px;
-`
-
-const BookingText = styled(Text)`
-  color: white;
-  font-size: 16px;
-  font-weight: 600;
 `

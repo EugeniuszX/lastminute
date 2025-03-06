@@ -88,7 +88,7 @@ export const HomeScreen: React.FC = () => {
       {isOpenFilterModal && (
         <FilterHotels
           onApply={setFilterOptions}
-          options={{}}
+          options={filterOptions}
           onClose={toggleFilterModal}
         />
       )}
