@@ -1,8 +1,20 @@
 import type { RouteProp } from "@react-navigation/native"
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack"
-import React from "react"
-import { ScrollView, TouchableOpacity } from "react-native"
+import React, { useCallback, useState } from "react"
+import type {
+  ListRenderItemInfo,
+  NativeScrollEvent,
+  NativeSyntheticEvent,
+} from "react-native"
+import {
+  FlatList,
+  Pressable,
+  ScrollView,
+  TouchableOpacity,
+  useWindowDimensions,
+} from "react-native"
 import FastImage from "react-native-fast-image"
+import ImageView from "react-native-image-viewing"
 import { useSharedValue } from "react-native-reanimated"
 import styled from "styled-components/native"
 
@@ -20,21 +32,66 @@ export const HotelDetailsScreen: React.FC<Props> = ({ navigation, route }) => {
   const { data } = route.params
   const { isFavorite, setFavorites } = useUserStore()
   const isFavoriteShared = useSharedValue(isFavorite(data.id) ? 1 : 0)
+  const [isImageViewVisible, setIsImageViewVisible] = useState(false)
+  const [currentImageIndex, setCurrentImageIndex] = useState(0)
+  const { width } = useWindowDimensions()
+
+  const images = data.gallery.map((uri) => ({ uri }))
 
   const toggleIsFavorite = () => setFavorites(data)
+
+  const renderItem = useCallback(
+    ({ item }: ListRenderItemInfo<string>) => (
+      <Pressable onPress={() => setIsImageViewVisible(true)}>
+        <GalleryImage source={{ uri: item }} width={width} />
+      </Pressable>
+    ),
+    [width],
+  )
+
+  const onMomentumScrollEnd = (
+    event: NativeSyntheticEvent<NativeScrollEvent>,
+  ) => {
+    const newIndex = Math.round(
+      event.nativeEvent.contentOffset.x /
+        event.nativeEvent.layoutMeasurement.width,
+    )
+    setCurrentImageIndex(newIndex)
+  }
+
+  const keyExtractor = (_: string, index: number) => index.toString()
 
   return (
     <WithSafeArea>
       <Container>
         <Header>
           <BackButton onPress={() => navigation.goBack()}>
-            <Text variant="primary" style={{ fontSize: 28 }}>
+            <Text variant="primary" style={{ fontSize: 20 }}>
               ←
             </Text>
           </BackButton>
 
           <ImageContainer>
-            <HotelImage source={{ uri: data.gallery[0] }} />
+            {data.gallery.length > 1 ? (
+              <GalleryContainer>
+                <FlatList
+                  data={data.gallery}
+                  horizontal
+                  pagingEnabled
+                  showsHorizontalScrollIndicator={false}
+                  onMomentumScrollEnd={onMomentumScrollEnd}
+                  renderItem={renderItem}
+                  keyExtractor={keyExtractor}
+                />
+                <PaginationContainer>
+                  <Text variant="primary" style={{ color: "white" }}>
+                    {currentImageIndex + 1}/{data.gallery.length}
+                  </Text>
+                </PaginationContainer>
+              </GalleryContainer>
+            ) : (
+              <HotelImage source={{ uri: data.gallery[0] }} />
+            )}
             <FavoriteButton>
               <HeartIcon
                 isFavorite={isFavoriteShared}
@@ -95,6 +152,12 @@ export const HotelDetailsScreen: React.FC<Props> = ({ navigation, route }) => {
           </Section>
         </Content>
       </Container>
+      <ImageView
+        images={images}
+        imageIndex={currentImageIndex}
+        visible={isImageViewVisible}
+        onRequestClose={() => setIsImageViewVisible(false)}
+      />
     </WithSafeArea>
   )
 }
@@ -102,6 +165,25 @@ export const HotelDetailsScreen: React.FC<Props> = ({ navigation, route }) => {
 const Container = styled(ScrollView)`
   flex: 1;
   background-color: ${({ theme }) => theme.background};
+`
+
+const GalleryContainer = styled.View`
+  height: 300px;
+  width: 100%;
+`
+
+const GalleryImage = styled(FastImage)<{ width: number }>`
+  width: ${({ width }) => width}px;
+  height: 300px;
+`
+
+const PaginationContainer = styled.View`
+  position: absolute;
+  bottom: 16px;
+  right: 16px;
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 8px 12px;
+  border-radius: 16px;
 `
 
 const FavoriteButton = styled(TouchableOpacity)`
