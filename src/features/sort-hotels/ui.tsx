@@ -3,6 +3,8 @@ import React, { useMemo, useRef } from "react"
 import { TouchableOpacity } from "react-native"
 import styled from "styled-components/native"
 
+import { ArrowDown } from "../../shared/assets/icons/ArrowDown"
+import { ArrowUp } from "../../shared/assets/icons/ArrowUp"
 import { Text, WithBottomSheet } from "../../shared/ui"
 
 export type SortOption = "price" | "rating"
@@ -25,6 +27,11 @@ export const SortHotels: React.FC<Props> = ({
 
   const snapPoints = useMemo(() => [400], [])
 
+  const onSelectOption = (option: SortOption, order: SortOrder) => {
+    bottomSheetRef.current?.forceClose()
+    onSelect(option, order)
+  }
+
   return (
     <WithBottomSheet
       bottomSheetRef={bottomSheetRef}
@@ -36,27 +43,31 @@ export const SortHotels: React.FC<Props> = ({
         <OptionGroup>
           <Option
             active={selectedOption === "price" && selectedOrder === "asc"}
-            onPress={() => onSelect("price", "asc")}
+            onPress={() => onSelectOption("price", "asc")}
           >
             <Text variant="primary">Price: Low to High</Text>
+            <ArrowUp />
           </Option>
           <Option
             active={selectedOption === "price" && selectedOrder === "desc"}
-            onPress={() => onSelect("price", "desc")}
+            onPress={() => onSelectOption("price", "desc")}
           >
             <Text variant="primary">Price: High to Low</Text>
-          </Option>
-          <Option
-            active={selectedOption === "rating" && selectedOrder === "desc"}
-            onPress={() => onSelect("rating", "desc")}
-          >
-            <Text variant="primary">Rating: High to Low</Text>
+            <ArrowDown />
           </Option>
           <Option
             active={selectedOption === "rating" && selectedOrder === "asc"}
-            onPress={() => onSelect("rating", "asc")}
+            onPress={() => onSelectOption("rating", "asc")}
           >
             <Text variant="primary">Rating: Low to High</Text>
+            <ArrowUp />
+          </Option>
+          <Option
+            active={selectedOption === "rating" && selectedOrder === "desc"}
+            onPress={() => onSelectOption("rating", "desc")}
+          >
+            <Text variant="primary">Rating: High to Low</Text>
+            <ArrowDown />
           </Option>
         </OptionGroup>
       </Container>
@@ -79,6 +90,8 @@ const OptionGroup = styled.View`
 `
 
 const Option = styled(TouchableOpacity)<{ active?: boolean }>`
+  flex-direction: row;
+  align-items: center;
   padding: 16px;
   border-radius: 12px;
   background-color: ${({ theme, active }) =>

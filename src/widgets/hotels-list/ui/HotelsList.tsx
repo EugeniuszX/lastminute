@@ -30,7 +30,7 @@ export const HotelsList: React.FC<HotelsListProps> = ({
         showsVerticalScrollIndicator={false}
         stickyHeaderIndices={[0]}
         ListHeaderComponent={headerComponent}
-        contentContainerStyle={{ paddingVertical: 8 }}
+        contentContainerStyle={{ paddingBottom: 8 }}
       />
     </Container>
   )

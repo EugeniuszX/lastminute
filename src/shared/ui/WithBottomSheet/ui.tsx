@@ -55,7 +55,7 @@ export const WithBottomSheet: React.FC<IProps> = (props) => {
       enablePanDownToClose={true}
       backdropComponent={CustomBackdrop}
       onClose={onClose}
-      handleComponent={null}
+      //   handleComponent={null}
       snapPoints={snapPoints}
       animateOnMount={animateOnMount}
       backgroundStyle={{
