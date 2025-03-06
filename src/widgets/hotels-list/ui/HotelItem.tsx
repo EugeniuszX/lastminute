@@ -3,48 +3,23 @@ import type { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import React, { useState } from "react"
 import { TouchableOpacity } from "react-native"
 import FastImage from "react-native-fast-image"
-import {
-  SharedTransition,
-  SharedTransitionType,
-  withSpring,
-} from "react-native-reanimated"
+import { useSharedValue } from "react-native-reanimated"
 import styled from "styled-components/native"
 
 import type { Hotel } from "../../../entities/hotel"
 import type { RootStackListType } from "../../../screens"
+import { HeartIcon } from "../../../shared/assets/icons/HeartIcon"
 import { Text } from "../../../shared/ui"
 
 interface Props {
   hotel: Hotel
 }
 
-export const transition = SharedTransition.custom((values) => {
-  "worklet"
-  return {
-    height: withSpring(values.targetHeight),
-    width: withSpring(values.targetWidth),
-  }
-})
-  .progressAnimation((values, progress) => {
-    "worklet"
-    const getValue = (
-      progress: number,
-      target: number,
-      current: number,
-    ): number => {
-      return progress * (target - current) + current
-    }
-    return {
-      width: getValue(progress, values.targetWidth, values.currentWidth),
-      height: getValue(progress, values.targetHeight, values.currentHeight),
-    }
-  })
-  .defaultTransitionType(SharedTransitionType.ANIMATION)
-
 export const HotelItem: React.FC<Props> = ({ hotel }) => {
   const [imageError, setImageError] = useState(false)
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackListType, "Home">>()
+  const isFavorite = useSharedValue(0)
 
   const onPressHotel = () => navigation.push("HotelDetails", { data: hotel })
 
@@ -64,6 +39,9 @@ export const HotelItem: React.FC<Props> = ({ hotel }) => {
             <Text variant="secondary">No image available</Text>
           </PlaceholderContainer>
         )}
+        <FavoriteButton>
+          <HeartIcon isFavorite={isFavorite} callback={() => {}} />
+        </FavoriteButton>
       </ImageContainer>
 
       <Content>
@@ -112,6 +90,13 @@ const Container = styled(TouchableOpacity)`
   shadow-opacity: 0.12;
   shadow-radius: 20px;
   elevation: 10;
+`
+
+const FavoriteButton = styled(TouchableOpacity)`
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 1;
 `
 
 const PlaceholderContainer = styled.View`

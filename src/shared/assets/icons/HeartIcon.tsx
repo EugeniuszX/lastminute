@@ -1,6 +1,5 @@
 import * as React from "react"
 import { Pressable } from "react-native"
-import ReactNativeHapticFeedback from "react-native-haptic-feedback"
 import Animated, {
   interpolateColor,
   useAnimatedProps,
@@ -64,11 +63,6 @@ export const HeartIcon: React.FC<HeartIconProps> = (props) => {
   }
 
   const handlePressHeart = () => {
-    ReactNativeHapticFeedback.trigger("impactLight", {
-      enableVibrateFallback: true,
-      ignoreAndroidSystemSettings: false,
-    })
-
     handleStartAnimation()
     callback()
   }
