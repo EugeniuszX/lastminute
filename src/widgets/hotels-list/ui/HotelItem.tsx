@@ -7,6 +7,7 @@ import { useSharedValue } from "react-native-reanimated"
 import styled from "styled-components/native"
 
 import type { Hotel } from "../../../entities/hotel"
+import { useUserStore } from "../../../entities/user"
 import type { RootStackListType } from "../../../screens"
 import { HeartIcon } from "../../../shared/assets/icons/HeartIcon"
 import { Text } from "../../../shared/ui"
@@ -16,12 +17,17 @@ interface Props {
 }
 
 export const HotelItem: React.FC<Props> = ({ hotel }) => {
-  const [imageError, setImageError] = useState(false)
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackListType, "Home">>()
-  const isFavorite = useSharedValue(0)
+  const { isFavorite, setFavorites } = useUserStore()
+  const [imageError, setImageError] = useState(false)
+  const isFavoriteShared = useSharedValue(isFavorite(hotel.id) ? 1 : 0)
 
   const onPressHotel = () => navigation.push("HotelDetails", { data: hotel })
+
+  const toggleIsFavorite = () => {
+    setFavorites(hotel)
+  }
 
   return (
     <Container activeOpacity={0.6} onPress={onPressHotel}>
@@ -40,7 +46,10 @@ export const HotelItem: React.FC<Props> = ({ hotel }) => {
           </PlaceholderContainer>
         )}
         <FavoriteButton>
-          <HeartIcon isFavorite={isFavorite} callback={() => {}} />
+          <HeartIcon
+            isFavorite={isFavoriteShared}
+            callback={toggleIsFavorite}
+          />
         </FavoriteButton>
       </ImageContainer>
 

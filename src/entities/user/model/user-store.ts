@@ -7,6 +7,7 @@ import type { Hotel } from "../../hotel"
 interface AuthState {
   favorites: Hotel[] | null
   setFavorites: (hotels: Hotel) => void
+  isFavorite: (id: number) => boolean
 }
 
 export const useUserStore = createSelectors(
@@ -27,6 +28,14 @@ export const useUserStore = createSelectors(
           } else {
             set({ favorites: [hotel] })
           }
+        },
+        isFavorite: (id) => {
+          const favorites = get().favorites
+
+          if (favorites) {
+            return favorites.some((item) => item.id === id)
+          }
+          return false
         },
       }),
       {

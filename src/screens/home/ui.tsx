@@ -10,7 +10,7 @@ import { WithSafeArea } from "../../shared/ui"
 import { HotelsList, ListHeader } from "../../widgets/hotels-list"
 
 export const HomeScreen: React.FC = () => {
-  const { data } = useHotels()
+  const { data, isPending, isError } = useHotels()
   const [isOpenSortModal, setIsOpenSortModal] = useState(false)
   const [isOpenFilterModal, setIsOpenFilterModal] = useState(false)
   const theme = useTheme()
@@ -70,11 +70,15 @@ export const HomeScreen: React.FC = () => {
     <WithSafeArea color={theme.surface}>
       <HotelsList
         data={filteredAndSortedHotels}
+        isPending={isPending}
+        isError={isError}
         headerComponent={
-          <ListHeader
-            onPressFilter={toggleFilterModal}
-            onPressSort={toggleSortModal}
-          />
+          data?.length ? (
+            <ListHeader
+              onPressFilter={toggleFilterModal}
+              onPressSort={toggleSortModal}
+            />
+          ) : undefined
         }
       />
       {isOpenSortModal && (
