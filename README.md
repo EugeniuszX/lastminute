@@ -1,3 +1,7 @@
+<h1 align="center">
+  <img alt="logo" src="https://res.cloudinary.com/lastminute-contenthub/image/upload/s--m8CleVCV--/c_limit,w_1024,h_999999/f_auto,q_auto:best/v1/DAM/Logos%20%2B%20fonts/lastminutecom/1200x1200_lm" width="124px" style="border-radius:10px"/><br/>
+Lastminute </h1>
+
 ## **Tech**
 
 - React native

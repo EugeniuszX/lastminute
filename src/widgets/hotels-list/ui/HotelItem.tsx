@@ -6,8 +6,7 @@ import FastImage from "react-native-fast-image"
 import { useSharedValue } from "react-native-reanimated"
 import styled from "styled-components/native"
 
-import type { Hotel } from "../../../entities/hotel"
-import { useUserStore } from "../../../entities/user"
+import { type Hotel, useHotelStore } from "../../../entities/hotel"
 import type { RootStackListType } from "../../../screens"
 import { HeartIcon } from "../../../shared/assets/icons/HeartIcon"
 import { Text } from "../../../shared/ui"
@@ -20,7 +19,7 @@ export const HotelItem: React.FC<Props> = ({ hotel }) => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackListType, "Home">>()
   const [imageError, setImageError] = useState(false)
-  const { isFavorite, favorites, setFavorites } = useUserStore()
+  const { isFavorite, favorites, setFavorites } = useHotelStore()
   const isFavoriteShared = useSharedValue(isFavorite(hotel.id) ? 1 : 0)
 
   const onPressHotel = () => navigation.push("HotelDetails", { data: hotel })

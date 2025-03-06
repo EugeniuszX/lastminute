@@ -2,16 +2,16 @@ import { create } from "zustand"
 import { persist } from "zustand/middleware"
 
 import { createSelectors, storage } from "../../../shared/lib"
-import type { Hotel } from "../../hotel"
+import type { Hotel } from ".."
 
-interface AuthState {
+interface HotelState {
   favorites: Hotel[] | undefined
   setFavorites: (hotels: Hotel) => void
   isFavorite: (id: number) => boolean
 }
 
-export const useUserStore = createSelectors(
-  create<AuthState>()(
+export const useHotelStore = createSelectors(
+  create<HotelState>()(
     persist(
       (set, get) => ({
         favorites: undefined,
@@ -39,7 +39,7 @@ export const useUserStore = createSelectors(
         },
       }),
       {
-        name: "user",
+        name: "hotel",
         storage: storage,
       },
     ),

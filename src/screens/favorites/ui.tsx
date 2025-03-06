@@ -3,7 +3,7 @@ import React from "react"
 import { useTheme } from "styled-components/native"
 import styled from "styled-components/native"
 
-import { useUserStore } from "../../entities/user"
+import { useHotelStore } from "../../entities/hotel"
 import { Text, WithSafeArea } from "../../shared/ui"
 import { HotelsList } from "../../widgets/hotels-list"
 import type { RootStackListType } from ".."
@@ -16,7 +16,7 @@ export const FavoritesScreen: React.FC<FavoritesScreenProps> = ({
   navigation,
 }) => {
   const theme = useTheme()
-  const { favorites } = useUserStore()
+  const { favorites } = useHotelStore()
 
   return (
     <WithSafeArea color={theme.surface}>

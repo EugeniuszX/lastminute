@@ -18,7 +18,7 @@ import ImageView from "react-native-image-viewing"
 import { useSharedValue } from "react-native-reanimated"
 import styled from "styled-components/native"
 
-import { useUserStore } from "../../entities/user"
+import { useHotelStore } from "../../entities/hotel"
 import { HeartIcon } from "../../shared/assets/icons/HeartIcon"
 import { Text, WithSafeArea } from "../../shared/ui"
 import type { RootStackListType } from "../index"
@@ -30,7 +30,7 @@ interface Props {
 
 export const HotelDetailsScreen: React.FC<Props> = ({ navigation, route }) => {
   const { data } = route.params
-  const { isFavorite, setFavorites } = useUserStore()
+  const { isFavorite, setFavorites } = useHotelStore()
   const isFavoriteShared = useSharedValue(isFavorite(data.id) ? 1 : 0)
   const [isImageViewVisible, setIsImageViewVisible] = useState(false)
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
